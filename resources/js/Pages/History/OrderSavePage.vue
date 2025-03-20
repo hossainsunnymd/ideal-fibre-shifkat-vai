@@ -10,7 +10,6 @@ let id=params.get('id');
 let list = page.props.order;
 const form = useForm({
     delivered_work_order: list.delivered_work_order,
-    pending_work_order: list.pending_work_order,
     id: id
 
 })
@@ -49,11 +48,6 @@ const submitForm = () => {
         <label class="block text-gray-700 text-sm font-bold mb-2" for="delivered-work-order">Delivered Work Order</label>
         <input v-model="form.delivered_work_order" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
           type="text">
-      </div>
-      <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="pending-work-order">Pending Work Order</label>
-        <input v-model="form.pending_work_order" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
-          type="text" >
       </div>
       <button type="submit"
         class="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2.5 rounded-lg transition-colors"

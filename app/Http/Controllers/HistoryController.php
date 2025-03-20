@@ -31,22 +31,24 @@ class HistoryController extends Controller
         DB::beginTransaction();
         try{
             $invoiceProductId=CompleteWorkOrder::where('id','=',$request->input(key: 'id'))->first()->invoice_product_id;
+            $currentDeliveredWorkOrder=CompleteWorkOrder::where('id','=',$request->input(key: 'id'))->first()->delivered_work_order;
+            $currentPendingWorkOrder=CompleteWorkOrder::where('id','=',$request->input(key: 'id'))->first()->pending_work_order;
+            $currentCompleteWorkOrder=InvoiceProduct::where('id','=',$invoiceProductId)->first()->complete_work_order;
+            $currentInCompleteWorkOrder=InvoiceProduct::where('id','=',$invoiceProductId)->first()->incomplete_work_order;
             $deliveredWorkOrder=$request->input('delivered_work_order');
-            $pendingWorkOrder=$request->input('pending_work_order');
-            CompleteWorkOrder::where('id','=',$request->input(key: 'id'))->update([
+            CompleteWorkOrder::where('id','=',$request->input( 'id'))->update([
                 'delivered_work_order'=>$deliveredWorkOrder,
-                'pending_work_order'=>$pendingWorkOrder
+                'pending_work_order'=>$currentPendingWorkOrder+$currentDeliveredWorkOrder-$deliveredWorkOrder
             ]);
-
             InvoiceProduct::where('id','=',$invoiceProductId)->update([
-                'complete_work_order'=>$deliveredWorkOrder,
-                'incomplete_work_order'=>$pendingWorkOrder
+                'complete_work_order'=>$currentCompleteWorkOrder-$currentDeliveredWorkOrder+$deliveredWorkOrder,
+                'incomplete_work_order'=>$currentInCompleteWorkOrder+$currentDeliveredWorkOrder-$deliveredWorkOrder
             ]);
             DB::commit();
             return redirect()->back()->with(['status'=>true,'message'=>'Work order updated successfully']);
         }catch(Exception $e){
             DB::rollBack();
-            return redirect()->back()->with(['status'=>false,'message'=>'Something went wrong']);
+            return redirect()->back()->with(['status'=>false,'message'=>'Something went ']);
         }
 
     }

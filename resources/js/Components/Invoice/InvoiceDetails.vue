@@ -5,7 +5,7 @@ const props = defineProps({
     show: Boolean,
     customer: Object,
 });
-console.log(props.customer);
+
 const emit = defineEmits(["update:show"]);
 
 const printInvoice = () => {
@@ -28,6 +28,11 @@ const printInvoice = () => {
 
     document.body.removeChild(printDiv);
 };
+
+const formatDate = (date) => {
+    props.customer.created_at = new Date(props.customer.created_at);
+    return props.customer.created_at.toISOString().slice(0, 10);
+}
 </script>
 
 <template>
@@ -45,6 +50,7 @@ const printInvoice = () => {
                     <h1 class="text-xl font-bold">Invoice Details</h1>
                     <img class="h-[90px]" src="../../Assets/img/logo.jpg" alt="Logo" />
                 </div>
+                <div class="flex justify-end font-bold">Date: {{ formatDate(props.customer.created_at) }}</div>
                 <!-- Bill To Information -->
                 <div class="mb-4">
                     <h2 class="font-bold">Bill To:</h2>

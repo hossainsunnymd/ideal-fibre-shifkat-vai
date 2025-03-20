@@ -10,14 +10,14 @@ function toggleSidebar() {
 </script>
 
 <template>
-    <div id="header" class="h-[60px]  md:hidden transition duration-300 fixed top-0 left-0 right-0 z-50">
+    <div id="header" class="h-[60px]  md:hidden transition duration-300 fixed top-0 left-0 right-0 z-50 ">
         <button  @click="toggleSidebar" id="menu-toggle" class=" p-2 ml-1 mt-1 bg-gray-200 rounded-md "> <span class="material-icons">menu</span></button>
     </div>
 
     <!-- Sidebar -->
     <aside
         id="sidebar"
-        class="w-64 bg-white shadow-lg flex flex-col fixed inset-y-0 left-0 transform -translate-x-full transition-transform duration-300 md:translate-x-0 z-10"
+        class="w-64 bg-white shadow-lg flex flex-col fixed inset-y-0 left-0 transform -translate-x-full transition-transform duration-300 md:translate-x-0 z-10 overflow-auto"
     >
         <div class="p-4">
             <h1 class="text-lg font-bold text-gray-700">Dashboard</h1>

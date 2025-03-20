@@ -43,11 +43,12 @@ const showDetails = (id) => {
 const searchForm = ref({
   fromDate: "",
   toDate: "",
+  customerId: "",
 });
 
 const search = () => {
   router.get(
-    `/invoice-page?fromDate=${searchForm.value.fromDate}&toDate=${searchForm.value.toDate}`
+    `/invoice-page?fromDate=${searchForm.value.fromDate}&toDate=${searchForm.value.toDate}&customerId=${searchForm.value.customerId}`
   );
 };
 
@@ -69,6 +70,11 @@ const formatDate = (date) => {
         class="px-2 py-1 w-full md:w-[200px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
         placeholder="Search...."
       />
+
+      <select v-model="searchForm.customerId" class="bg-white px-2 py-1 w-full md:w-[200px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+        <option value="" disabled selected>Select Customer</option>
+        <option v-for="customer in page.props.customerList" :key="customer.id" :value="customer.id">{{ customer.name }}</option>
+      </select>
 
       <div class="flex flex-col md:flex-row gap-2 w-full md:w-auto ">
         <label class="flex flex-col text-sm">
@@ -107,7 +113,5 @@ const formatDate = (date) => {
         </template>
       </EasyDataTable>
     </div>
-
-    <p class="font-bold mt-3">Total: {{ page.props.total }}</p>
   </div>
 </template>

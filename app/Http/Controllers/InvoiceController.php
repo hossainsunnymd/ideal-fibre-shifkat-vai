@@ -52,23 +52,24 @@ class InvoiceController extends Controller
 
     public function listInvoice(Request $request)
     {
-
+        $customerList = Customer::all();
         $list = Invoice::when($request->query('fromDate') && $request->query('toDate'), function ($query) use ($request) {
             $fromDate = date('Y-m-d', strtotime($request->fromDate));
             $toDate = date('Y-m-d', strtotime($request->toDate));
             $query->whereDate('created_at', '>=', $fromDate)->whereDate('created_at', '<=', $toDate);
+        })->when($request->query('customerId'), function ($query) use ($request) {
+            $query->where('customer_id', '=', $request->customerId);
+
+        })->when($request->query('fromDate') && $request->query('toDate') && $request->query('customerId'),function ($query) use ($request){
+            $fromDate = date('Y-m-d', strtotime($request->fromDate));
+            $toDate = date('Y-m-d', strtotime($request->toDate));
+            $query->where('customer_id', '=', $request->customerId)->whereDate('created_at', '>=', $fromDate)->whereDate('created_at', '<=', $toDate);
         })->with('customer', 'invoiceProducts.product')
             ->get();
 
-        $total = Invoice::when($request->query('fromDate') && $request->query('toDate'), function ($query) use ($request) {
-            $fromDate = date('Y-m-d', strtotime($request->fromDate));
-            $toDate = date('Y-m-d', strtotime($request->toDate));
-            $query->whereDate('created_at', '>=', $fromDate)->whereDate('created_at', '<=', $toDate);
-        })->sum('total');
-
         return Inertia::render('Invoice/InvoiceListPage', [
             'list' => $list,
-            'total' => $total
+            'customerList' => $customerList
         ]);
     }
 
