@@ -1,14 +1,18 @@
 <script setup>
 import { ref } from "vue";
 import InvoiceDetails from "./InvoiceDetails.vue";
+// import InvoiceAllDetails from "./InvoiceAllDetails.vue";
 import { Link, usePage, useForm, router } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
+import InvoiceDetailsList from "./InvoiceDetailsList.vue";
 
 const toaster = createToaster({});
 
 const show = ref(false);
 const customer = ref();
 const page = usePage();
+
+const detail=ref(false);
 
 const searchValue = ref();
 const searchField = ref(["customer.name", "id"]);
@@ -40,6 +44,10 @@ const showDetails = (id) => {
   customer.value = items.value.find((item) => item.id === id);
 };
 
+const showAllDetails = () => {
+    detail.value = !detail.value
+}
+
 const searchForm = ref({
   fromDate: "",
   toDate: "",
@@ -62,6 +70,7 @@ const formatDate = (date) => {
   <div class="p-4 bg-[#f8f8f8] overflow-auto">
     <h1 class="text-2xl font-bold mb-4">Work Order List / Invoices</h1>
     <InvoiceDetails v-model:show="show" :customer="customer" />
+    <InvoiceDetailsList v-model:show="detail" :items="items" />
 
     <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-5">
       <input
@@ -105,6 +114,7 @@ const formatDate = (date) => {
           <button class="btn btn-outline-dark text-sm px-3 py-1 btn-sm m-1" @click="showDetails(id)">
             <i class="fa text-sm fa-eye"></i>
           </button>
+          <button class="btn btn-outline-dark text-sm px-3 py-1 btn-sm m-1" @click="showAllDetails()">view all</button>
           <button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 mx-2 mb-1" @click="deleteInvoice(id)">Delete</button>
         </template>
 
